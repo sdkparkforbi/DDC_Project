@@ -4,9 +4,10 @@ from matplotlib.ticker import FuncFormatter
 import streamlit as st
 import matplotlib.font_manager as fm
 
-# 한글 폰트 적용
-font_path = "C:/Windows/Fonts/NanumGothic.ttf"  # 한글 폰트 경로 설정
-fontprop = fm.FontProperties(fname=font_path, size=12)
+# GitHub 저장소에 업로드된 폰트 파일 경로 설정
+font_path = os.path.join(os.path.dirname(__file__), 'NanumGothic.ttf')
+# font_path = "C:/Windows/Fonts/NanumGothic.ttf"
+fontprop = fm.FontProperties(fname=font_path, size=10)
 
 # Streamlit 앱 제목
 st.title("경기북부 관광객 데이터 분석")
