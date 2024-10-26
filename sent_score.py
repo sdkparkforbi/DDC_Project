@@ -17,7 +17,7 @@ api_key = os.getenv("DB_PASSWORD")
 # 데이터베이스 연결 정보
 db_host = '59.9.20.28'
 db_user = 'user1'
-db_password = f'{api_key}'
+db_password = api_key
 db_database = 'cuif'
 charset = 'utf8'
 
