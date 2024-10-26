@@ -35,7 +35,16 @@ def load_and_preprocess_data():
     # 데이터 그룹화: 각 지역별 데이터 미리 그룹화
     grouped_total = tourist_df.groupby(['signguNm', 'month']).agg({'touNum': 'sum'}).reset_index()
     grouped_individual = tourist_df.groupby(['signguNm', 'month', 'touDivNm']).agg({'touNum': 'sum'}).reset_index()
-    grouped_foreigner = tourist_df[tourist_df['touDivNm'] == '외국인(c)'].groupby(['signguNm', 'month']).agg({'touNum': 'sum'}).reset_index()
+    grouped_foreigner = tourist_df[tourist_df['touDivNm'] == '외국인(c)'].groupby(['signguNm', 'month']).agg(
+        {'touNum': 'sum'}).reset_index()
+
+    # 이동 평균 추가
+    grouped_total['moving_avg'] = grouped_total.groupby('signguNm')['touNum'].transform(
+        lambda x: x.rolling(window=12).mean())
+    grouped_individual['moving_avg'] = grouped_individual.groupby(['signguNm', 'touDivNm'])['touNum'].transform(
+        lambda x: x.rolling(window=12).mean())
+    grouped_foreigner['moving_avg'] = grouped_foreigner.groupby('signguNm')['touNum'].transform(
+        lambda x: x.rolling(window=12).mean())
 
     return grouped_total, grouped_individual, grouped_foreigner
 
@@ -53,12 +62,17 @@ def plot_total_trend_for_selected_region(region_data, region_name):
     months = region_data['month'].astype(str)
     tou_nums = region_data['touNum']
     ax.plot(months, tou_nums, marker='o', label=f'{region_name} 전체 합계', color='blue')
+
+    # 이동 평균 추가
+    moving_avg = region_data['moving_avg']
+    ax.plot(months, moving_avg, linestyle='--', color='lightblue', label='12-Month Moving Avg', linewidth=2)
+
     ax.set_title(f'{region_name}(2019.10 ~ 2024.08) 월별 방문자 총합 추이', fontproperties=fontprop)
     ax.set_xlabel('년월', fontproperties=fontprop)
     ax.set_ylabel('방문자 수', fontproperties=fontprop)
     ax.yaxis.set_major_formatter(FuncFormatter(y_fmt))
-    ax.set_xticks(range(0, len(months), 3))
-    ax.set_xticklabels(months[::3], rotation=45, fontproperties=fontprop)
+    ax.set_xticks(range(0, len(months), 6))
+    ax.set_xticklabels(months[::6], rotation=0, fontproperties=fontprop)  # x축 레이블 회전을 0도로 설정
     ax.legend(prop=fontprop)
     ax.grid(True)
     st.pyplot(fig)
@@ -67,17 +81,34 @@ def plot_total_trend_for_selected_region(region_data, region_name):
 @st.cache_resource
 def plot_individual_trend_for_selected_region(region_data, region_name):
     fig, ax = plt.subplots(figsize=(10, 6))
-    for tou_type in ['현지인(a)', '외지인(b)', '외국인(c)']:
+
+    # '현지인(a)'와 '외지인(b)'만 포함하여 그래프 그리기 및 색상 지정
+    type_colors = {
+        '현지인(a)': 'blue',
+        '외지인(b)': 'orange'
+    }
+    moving_avg_colors = {
+        '현지인(a)': 'lightblue',
+        '외지인(b)': 'coral'
+    }
+
+    for tou_type in ['현지인(a)', '외지인(b)']:
         type_data = region_data[region_data['touDivNm'] == tou_type]
         months = type_data['month'].astype(str)
         tou_nums = type_data['touNum']
-        ax.plot(months, tou_nums, marker='o', label=f'{tou_type}')
+        ax.plot(months, tou_nums, marker='o', label=f'{tou_type}', color=type_colors[tou_type])
+
+        # 이동 평균 추가
+        moving_avg = type_data['moving_avg']
+        ax.plot(months, moving_avg, linestyle='--', label=f'{tou_type} 12-Month Moving Avg',
+                color=moving_avg_colors[tou_type], linewidth=2)
+
     ax.set_title(f'{region_name}(2019.10 ~ 2024.08) 월별 방문자 유형별 추이', fontproperties=fontprop)
     ax.set_xlabel('년월', fontproperties=fontprop)
     ax.set_ylabel('방문자 수', fontproperties=fontprop)
     ax.yaxis.set_major_formatter(FuncFormatter(y_fmt))
-    ax.set_xticks(range(0, len(months), 3))
-    ax.set_xticklabels(months[::3], rotation=45, fontproperties=fontprop)
+    ax.set_xticks(range(0, len(months), 6))
+    ax.set_xticklabels(months[::6], rotation=0, fontproperties=fontprop)  # x축 레이블 회전을 0도로 설정
     ax.legend(prop=fontprop)
     ax.grid(True)
     st.pyplot(fig)
@@ -89,12 +120,17 @@ def plot_foreigner_trend_for_selected_region(region_data, region_name):
     months = region_data['month'].astype(str)
     tou_nums = region_data['touNum']
     ax.plot(months, tou_nums, marker='o', label=f'{region_name} 외국인 방문자 수', color='green')
+
+    # 이동 평균 추가
+    moving_avg = region_data['moving_avg']
+    ax.plot(months, moving_avg, linestyle='--', color='lightgreen', label='12-Month Moving Avg', linewidth=2)
+
     ax.set_title(f'{region_name}(2019.10 ~ 2024.08) 외국인 방문자 추이', fontproperties=fontprop)
     ax.set_xlabel('년월', fontproperties=fontprop)
     ax.set_ylabel('외국인 방문자 수', fontproperties=fontprop)
     ax.yaxis.set_major_formatter(FuncFormatter(y_fmt))
-    ax.set_xticks(range(0, len(months), 3))
-    ax.set_xticklabels(months[::3], rotation=45, fontproperties=fontprop)
+    ax.set_xticks(range(0, len(months), 6))
+    ax.set_xticklabels(months[::6], rotation=0, fontproperties=fontprop)  # x축 레이블 회전을 0도로 설정
     ax.legend(prop=fontprop)
     ax.grid(True)
     st.pyplot(fig)
