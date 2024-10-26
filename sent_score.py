@@ -15,7 +15,7 @@ fontprop = fm.FontProperties(fname=font_path, size=10)
 
 # .env 파일 로드
 password_path = os.path.join(os.path.dirname(__file__), 'db_password')
-load_dotenv(passwprd_path)
+load_dotenv(password_path)
 
 # 환경 변수 불러오기
 db_password2 = os.getenv("DB_PASSWORD")
