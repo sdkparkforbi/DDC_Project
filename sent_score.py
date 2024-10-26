@@ -12,12 +12,13 @@ import os
 font_path = "C:/Windows/Fonts/NanumGothic.ttf"
 fontprop = fm.FontProperties(fname=font_path, size=10)
 
-api_key = os.getenv("DB_PASSWORD")
+# .env 파일 로드
+load_dotenv('db_password')
 
 # 데이터베이스 연결 정보
 db_host = '59.9.20.28'
 db_user = 'user1'
-db_password = api_key
+db_password = os.getenv("DB_PASSWORD")
 db_database = 'cuif'
 charset = 'utf8'
 
