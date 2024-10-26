@@ -4,6 +4,7 @@ import requests
 from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import os
 
 # GitHub 저장소에 업로드된 폰트 파일 경로 설정
 font_path = os.path.join(os.path.dirname(__file__), 'NanumGothic.ttf')
