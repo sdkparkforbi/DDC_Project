@@ -6,24 +6,16 @@ import matplotlib.dates as mdates
 import matplotlib.font_manager as fm
 from datetime import datetime
 import os
-from dotenv import load_dotenv
 
 # GitHub 저장소에 업로드된 폰트 파일 경로 설정
 font_path = os.path.join(os.path.dirname(__file__), 'NanumGothic.ttf')
 # font_path = "C:/Windows/Fonts/NanumGothic.ttf"
 fontprop = fm.FontProperties(fname=font_path, size=10)
 
-# .env 파일 로드
-password_path = os.path.join(os.path.dirname(__file__), 'db_password')
-load_dotenv(password_path)
-
-# 환경 변수 불러오기
-db_password2 = os.getenv("DB_PASSWORD")
-
 # 데이터베이스 연결 정보
 db_host = '59.9.20.28'
 db_user = 'user1'
-db_password = db_password2
+db_password = 'user1!!'
 db_database = 'cuif'
 charset = 'utf8'
 
