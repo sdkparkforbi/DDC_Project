@@ -18,12 +18,12 @@ password_path = os.path.join(os.path.dirname(__file__), 'db_password')
 load_dotenv(passwprd_path)
 
 # 환경 변수 불러오기
-db_password = os.getenv("DB_PASSWORD")
+db_password2 = os.getenv("DB_PASSWORD")
 
 # 데이터베이스 연결 정보
 db_host = '59.9.20.28'
 db_user = 'user1'
-db_password = os.getenv("DB_PASSWORD")
+db_password = db_password2
 db_database = 'cuif'
 charset = 'utf8'
 
