@@ -11,6 +11,8 @@ font_path = os.path.join(os.path.dirname(__file__), 'NanumGothic.ttf')
 # font_path = "C:/Windows/Fonts/NanumGothic.ttf"
 fontprop = fm.FontProperties(fname=font_path, size=10)
 
+api_key = os.getenv("kosis_api_key")
+
 # 특정 기간과 지역에 대한 API 호출 함수 정의 (데이터 캐싱 추가)
 @st.cache_data
 def fetch_population_data():
@@ -29,7 +31,7 @@ def fetch_population_data():
             month1 = str(int(month) + 411)
             url_page = (f"https://kosis.kr/openapi/Param/statisticsParameterData.do?"
                         f"method=getList&"
-                        f"apiKey=ODZlMTM0NGEyYWFlNmRmNzhmMmJhZDRkN2I2OWRmOGE=&"
+                        f"apiKey={api_key}"
                         f"itmId=T2+T3+T4+&"
                         f"objL1={region}+&"
                         f"objL2=ALL&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&"
