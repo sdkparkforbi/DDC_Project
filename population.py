@@ -141,7 +141,7 @@ ax2.set_ylabel('Population', fontproperties=fontprop, fontsize=12)
 # X축 레이블 간격 설정 (3년 간격)
 tick_positions = df_total_population['연도'].unique()[::36]
 ax2.set_xticks(tick_positions)
-ax2.set_xticklabels(tick_positions, rotation=45, fontsize=8, fontproperties=fontprop)
+ax2.set_xticklabels(tick_positions, rotation=0, fontsize=8, fontproperties=fontprop)
 
 # Streamlit을 통한 두 번째 그래프 출력
 st.pyplot(fig2)
