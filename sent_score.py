@@ -79,7 +79,7 @@ ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 ax.tick_params(axis='x', rotation=0)
 
 # 그래프 제목 및 축 레이블 설정
-ax.set_xlabel('월', fontproperties=fontprop)
+ax.set_xlabel('년월', fontproperties=fontprop)
 ax.set_ylabel('감성 지수 이동평균', fontproperties=fontprop)
 ax.set_title('전체 지자체 감성 지수 이동평균 비교', fontproperties=fontprop, fontsize=20, fontweight='bold')
 
@@ -119,7 +119,7 @@ ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 ax.tick_params(axis='x', rotation=0)
 
 # 그래프 제목 및 축 레이블 설정
-ax.set_xlabel('월', fontproperties=fontprop)
+ax.set_xlabel('년월', fontproperties=fontprop)
 ax.set_ylabel('감성 지수', fontproperties=fontprop)
 ax.set_title(f'{selected_city} 감성 지수', fontproperties=fontprop, fontsize=20, fontweight='bold')
 
