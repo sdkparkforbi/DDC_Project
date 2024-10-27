@@ -76,7 +76,7 @@ ax.xaxis.set_major_locator(mdates.MonthLocator(interval=12))
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 
 # X축 레이블을 회전시켜 보기 좋게 설정
-ax.tick_params(axis='x', rotation=45)
+ax.tick_params(axis='x', rotation=0)
 
 # 그래프 제목 및 축 레이블 설정
 ax.set_xlabel('월', fontproperties=fontprop)
@@ -116,7 +116,7 @@ ax.xaxis.set_major_locator(mdates.MonthLocator(interval=12))
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
 
 # X축 레이블을 회전시켜 보기 좋게 설정
-ax.tick_params(axis='x', rotation=45)
+ax.tick_params(axis='x', rotation=0)
 
 # 그래프 제목 및 축 레이블 설정
 ax.set_xlabel('월', fontproperties=fontprop)
