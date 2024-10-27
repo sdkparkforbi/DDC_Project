@@ -124,6 +124,7 @@ ax1.set_xticks(tick_positions)
 ax1.set_xticklabels(tick_positions, rotation=0, fontproperties=fontprop)
 
 # Streamlit을 통한 첫 번째 그래프 출력
+st.header(f"{selected_region}의 연령대별 인구 변화 추이")
 st.pyplot(fig1)
 
 # 두 번째 그래프: 전체 인구 변화 (월별 전체 합계)
@@ -144,4 +145,5 @@ ax2.set_xticks(tick_positions)
 ax2.set_xticklabels(tick_positions, rotation=0, fontsize=8, fontproperties=fontprop)
 
 # Streamlit을 통한 두 번째 그래프 출력
+st.header(f"{selected_region}의 인구 변화 추이")
 st.pyplot(fig2)
