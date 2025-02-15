@@ -40,9 +40,6 @@ def fetch_all_data():
 
 df_final = fetch_all_data()
 
-# 데이터 로드 완료 메시지
-st.success("데이터 로드 완료!")
-
 # 데이터 필터링
 df_filtered = df_final[df_final['연령별'] != '계']
 
