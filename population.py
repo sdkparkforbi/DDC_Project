@@ -28,9 +28,6 @@ tablens = 'population'
 # 로딩 메시지 표시
 st.info("데이터를 가져오는 중입니다. 1분 정도 기다려 주세요.")
 
-# 프로그래스 바 추가
-progress_bar = st.progress(0)
-
 @st.cache_data
 def fetch_all_data():
     conn = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_database, charset=charset)
@@ -41,17 +38,9 @@ def fetch_all_data():
         df['연도'] = pd.to_datetime(df['연도'], format='%Y%m')  # 연도 형식 변환
         all_data.append(df)
 
-        # 프로그래스 바 업데이트 (10개 도시 기준)
-        progress_bar.progress((i + 1) / len(cities))
-
     # 모든 데이터프레임을 하나로 합치기
     final_df = pd.concat(all_data, ignore_index=True)
     return final_df
-
-# 데이터 가져오기 (약 60초 대기)
-for i in range(60):
-    time.sleep(1)
-    progress_bar.progress((i + 1) / 60)
 
 df_final = fetch_all_data()
 
