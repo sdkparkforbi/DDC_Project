@@ -8,7 +8,6 @@ import matplotlib.font_manager as fm
 import os
 import matplotlib.dates as mdates
 import time
-from sqlalchemy import create_engine
 
 # GitHub 저장소에 업로드된 폰트 파일 경로 설정
 font_path = os.path.join(os.path.dirname(__file__), 'NanumGothic.ttf')
@@ -35,17 +34,18 @@ st.info("데이터를 가져오는 중입니다. 1분 정도 기다려 주세요
 # 프로그래스 바 추가
 progress_bar = st.progress(0)
 
+@st.cache_data
 def fetch_all_data():
+    conn = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_database, charset=charset)
     all_data = []
-    with engine.connect() as conn:
-        for i, city in enumerate(cities):
-            query = f"SELECT * FROM {table_name} WHERE 시군구='{city}'"
-            df = pd.read_sql(query, conn)
-            df['연도'] = pd.to_datetime(df['연도'], format='%Y%m')  # 연도 형식 변환
-            all_data.append(df)
+    for city in cities:
+        query = f"SELECT * FROM {table_name} WHERE 시군구='{city}'"
+        df = pd.read_sql(query, conn)
+        df['연도'] = pd.to_datetime(df['연도'], format='%Y%m')  # 연도 형식 변환
+        all_data.append(df)
 
-            # 프로그래스 바 업데이트 (10개 도시 기준)
-            progress_bar.progress((i + 1) / len(cities))
+        # 프로그래스 바 업데이트 (10개 도시 기준)
+        progress_bar.progress((i + 1) / len(cities))
 
     # 모든 데이터프레임을 하나로 합치기
     final_df = pd.concat(all_data, ignore_index=True)
