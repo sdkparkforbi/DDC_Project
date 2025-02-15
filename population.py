@@ -41,7 +41,7 @@ def fetch_all_data():
 df_final = fetch_all_data()
 
 # 데이터 필터링
-df_filtered = df_final[df_final['연령별'] != '계']
+df_filtered = df_final[(df_final['연령별'] != '계') & (df_final['성별'] != '총인구수')]
 
 # 연령 그룹화 함수 정의
 def group_age(row):
