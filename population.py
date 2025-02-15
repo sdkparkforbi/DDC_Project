@@ -36,7 +36,7 @@ def fetch_all_data():
     conn = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_database, charset=charset)
     all_data = []
     for city in cities:
-        query = f"SELECT * FROM {table_name} WHERE 시군구='{city}'"
+        query = f"SELECT * FROM {tablens} WHERE 시군구='{city}'"
         df = pd.read_sql(query, conn)
         df['연도'] = pd.to_datetime(df['연도'], format='%Y%m')  # 연도 형식 변환
         all_data.append(df)
