@@ -25,9 +25,6 @@ charset = 'utf8'
 cities = ['동두천시', '양주시', '포천시', '연천군', '가평군', '의정부시', '고양시', '구리시', '남양주시', '파주시']
 tablens = 'population'
 
-# 로딩 메시지 표시
-st.info("데이터를 가져오는 중입니다. 1분 정도 기다려 주세요.")
-
 @st.cache_data
 def fetch_all_data():
     conn = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_database, charset=charset)
@@ -35,7 +32,6 @@ def fetch_all_data():
     for city in cities:
         query = f"SELECT * FROM {tablens} WHERE 시군구='{city}'"
         df = pd.read_sql(query, conn)
-        df['연도'] = pd.to_datetime(df['연도'], format='%Y%m')  # 연도 형식 변환
         all_data.append(df)
 
     # 모든 데이터프레임을 하나로 합치기
