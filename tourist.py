@@ -20,7 +20,7 @@ def y_fmt(x, _):
 @st.cache_data
 def load_and_preprocess_data():
     # 관광객수 데이터 불러오기 및 전처리
-    tourist_df = pd.read_excel('경기북부_관광객.xlsx')
+    tourist_df = pd.read_excel('경기북부_관광객(20250216).xlsx')
 
     # 'signguNm' 열에서 '고양시'가 포함된 모든 값을 '고양시'로 변경
     tourist_df.loc[tourist_df['signguNm'].str.contains('고양시'), 'signguNm'] = '고양시'
