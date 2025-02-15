@@ -11,54 +11,32 @@ font_path = os.path.join(os.path.dirname(__file__), 'NanumGothic.ttf')
 # font_path = "C:/Windows/Fonts/NanumGothic.ttf"
 fontprop = fm.FontProperties(fname=font_path, size=10)
 
-# 특정 기간과 지역에 대한 API 호출 함수 정의 (데이터 캐싱 추가)
+# 데이터베이스 연결 정보
+db_host = '59.9.20.28'
+db_user = 'user1'
+db_password = 'user1!!'
+db_database = 'cuif'
+charset = 'utf8'
+
+# 조회할 도시 목록
+cities = '동두천시', '양주시', '포천시', '연천군', '가평군', '의정부시', '고양시', '구리시', '남양주시', '파주시']
+tablens = 'population'
+
+# 데이터베이스에서 모든 도시의 데이터를 가져오는 함수 (캐시 사용)
 @st.cache_data
-def fetch_population_data():
-    regions = [
-        "41250", "41630", "41650", "41800", "41820", "41150", "41280", "41310", "41360", "41480"
-    ]
-    start_date = '200801'
-    end_date = '202501'
-    monthly_list = pd.date_range(start="2008-01", end="2024-08", freq='M').strftime('%Y%m').tolist()
-    filtered_monthly_list = [month for month in monthly_list if month.endswith('01') and (int(month[:4]) - 2008) % 5 == 0]
-
-    all_data = []
-
-    for region in regions:
-        for month in filtered_monthly_list:
-            month1 = str(int(month) + 411)
-            url_page = (f"https://kosis.kr/openapi/Param/statisticsParameterData.do?"
-                        f"method=getList&"
-                        f"apiKey=ODZlMTM0NGEyYWFlNmRmNzhmMmJhZDRkN2I2OWRmOGE=&"
-                        f"itmId=T2+&"
-                        f"objL1={region}+&"
-                        f"objL2=ALL&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&"
-                        f"format=json&"
-                        f"jsonVD=Y&"
-                        f"prdSe=M&"
-                        f"startPrdDe={month}&"
-                        f"endPrdDe={month1}&"
-                        f"orgId=101&"
-                        f"tblId=DT_1B04006")
-
-            response = requests.get(url_page)
-            json_data = response.json()
-
-            if 'err' not in json_data:
-                data = pd.DataFrame({
-                    '연도': [datetime.strptime(f"{x['PRD_DE']}01", '%Y%m%d').strftime('%Y%m') for x in json_data],
-                    '시군구': [x['C1_NM'] for x in json_data],
-                    '연령별': [x['C2_NM'] for x in json_data],
-                    '성별': [x['ITM_NM'] for x in json_data],
-                    '인구수': [float(x['DT']) for x in json_data]
-                })
-                all_data.append(data)
-
-    df_final = pd.concat(all_data, ignore_index=True)
-    return df_final
+def fetch_all_data():
+    conn = pymysql.connect(host=db_host, user=db_user, password=db_password, database=db_database, charset=charset)
+    all_data = {}
+    for city in cities:
+        query = f"SELECT * FROM {tablens} WHERE 시군구='{city}'"
+        data = pd.read_sql(query, conn)
+        data['연도'] = pd.to_datetime(data['연도'], format='%Y%m')
+        all_data[city] = data
+    conn.close()
+    return all_data
 
 # 데이터 가져오기
-df_final = fetch_population_data()
+df_final = fetch_all_data()
 
 # 데이터 필터링
 df_filtered = df_final[df_final['연령별'] != '계']
