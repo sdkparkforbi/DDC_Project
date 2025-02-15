@@ -25,9 +25,6 @@ charset = 'utf8'
 cities = ['동두천시', '양주시', '포천시', '연천군', '가평군', '의정부시', '고양시', '구리시', '남양주시', '파주시']
 tablens = 'population'
 
-# SQLAlchemy 엔진 생성
-engine = create_engine(f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_database}?charset={charset}")
-
 # 로딩 메시지 표시
 st.info("데이터를 가져오는 중입니다. 1분 정도 기다려 주세요.")
 
