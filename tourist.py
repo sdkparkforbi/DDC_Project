@@ -30,7 +30,7 @@ def load_and_preprocess_data():
     tourist_df['month'] = tourist_df['baseYmd'].dt.to_period('M')
 
     # 2024년 9월 데이터 제외
-    # tourist_df = tourist_df[tourist_df['baseYmd'] < '2024-09-01']
+    tourist_df = tourist_df[tourist_df['baseYmd'] < '2025-01-01']
 
     # 데이터 그룹화: 각 지역별 데이터 미리 그룹화
     grouped_total = tourist_df.groupby(['signguNm', 'month']).agg({'touNum': 'sum'}).reset_index()
